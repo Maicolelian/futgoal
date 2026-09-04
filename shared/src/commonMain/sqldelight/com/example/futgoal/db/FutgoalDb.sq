@@ -1,0 +1,41 @@
+CREATE TABLE IF NOT EXISTS User (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    email TEXT NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS Reservation (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    userId INTEGER NOT NULL,
+    canchaNombre TEXT NOT NULL,
+    horario TEXT NOT NULL,
+    fecha TEXT NOT NULL,
+    FOREIGN KEY(userId) REFERENCES User(id)
+);
+
+-- User queries
+insertUser:
+INSERT INTO User(name, email)
+VALUES (?, ?);
+
+getCurrentUser:
+SELECT * FROM User LIMIT 1;
+
+findUserByEmail:
+SELECT * FROM User WHERE email = ?;
+
+-- Reservation queries
+insertReservation:
+INSERT INTO Reservation(userId, canchaNombre, horario, fecha)
+VALUES (?, ?, ?, ?);
+
+deleteReservation:
+DELETE FROM Reservation WHERE canchaNombre = ? AND horario = ? AND fecha = ?;
+
+getAllReservations:
+SELECT * FROM Reservation;
+
+getAllReservationsWithNames:
+SELECT Reservation.*, User.name AS userName
+FROM Reservation
+JOIN User ON Reservation.userId = User.id;
